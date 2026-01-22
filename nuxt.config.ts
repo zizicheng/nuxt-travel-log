@@ -11,6 +11,8 @@ export default defineNuxtConfig({
     "@nuxt/icon",
     "@nuxtjs/color-mode",
     "@pinia/nuxt",
+    "@vee-validate/nuxt",
+    "nuxt-csurf",
   ],
   eslint: {
     config: {
@@ -25,8 +27,5 @@ export default defineNuxtConfig({
   },
   colorMode: {
     dataValue: "theme",
-  },
-  typescript: {
-    typeCheck: true,
   },
 });
