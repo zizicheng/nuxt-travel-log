@@ -30,7 +30,7 @@ const onSubmit = handleSubmit(async (values) => {
     if (error.data?.data) {
       setErrors(error.data?.data);
     }
-    submitError.value = error.statusMessage || "An error occurred while submitting the form.";
+    submitError.value = error.data.statusMessage || error.statusMessage || "An error occurred while submitting the form.";
   }
   loading.value = false;
 });
