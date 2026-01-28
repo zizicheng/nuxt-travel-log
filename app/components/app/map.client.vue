@@ -1,8 +1,14 @@
 <script setup>
+import {
+  MglMap,
+  MglMarker,
+  MglNavigationControl,
+} from "@indoorequal/vue-maplibre-gl";
+
 import { CENTER_USA } from "~/lib/constants";
 
 const colorMode = useColorMode();
-// const style = "https://tiles.openfreemap.org/styles/liberty";
+const mapStore = useMapStore();
 const style = computed(() => {
   return colorMode.value === "dark"
     ? "/styles/dark.json"
@@ -10,6 +16,10 @@ const style = computed(() => {
 });
 const center = CENTER_USA;
 const zoom = 3;
+
+onMounted(() => {
+  mapStore.init();
+});
 </script>
 
 <template>
@@ -19,5 +29,24 @@ const zoom = 3;
     :zoom="zoom"
   >
     <MglNavigationControl />
-  </MglMap>
+    <MglMarker
+      v-for="point in mapStore.mapPoints"
+      :key="point.id"
+      :coordinates="[point.long, point.lat]"
+    >
+      <template #marker>
+        <div class="tooltip tooltip-top" :data-tip="point.label">
+          <Icon
+            name="i-tabler:map-pin-filled"
+            size="30"
+            class="text-primary"
+          />
+        </div>
+      </template>
+    </MglMarker>
+  </mglmap>
 </template>
+
+<style>
+@import "maplibre-gl/dist/maplibre-gl.css";
+</style>
