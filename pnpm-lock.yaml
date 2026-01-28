@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@indoorequal/vue-maplibre-gl':
+        specifier: ^8.4.2
+        version: 8.4.2(maplibre-gl@5.16.0)(vue@3.5.26(typescript@5.9.3))
       '@libsql/client':
         specifier: ^0.15.15
         version: 0.15.15
@@ -59,9 +62,6 @@ importers:
       nuxt-csurf:
         specifier: 1.6.5
         version: 1.6.5(magicast@0.5.1)
-      nuxt-maplibre:
-        specifier: 1.2.2
-        version: 1.2.2(vue@3.5.26(typescript@5.9.3))
       pinia:
         specifier: ^3.0.4
         version: 3.0.4(typescript@5.9.3)(vue@3.5.26(typescript@5.9.3))
@@ -4295,9 +4295,6 @@ packages:
 
   nuxt-csurf@1.6.5:
     resolution: {integrity: sha512-/DMNTON8LIVhntamKbBmAuM879B0QnuSJa7ZAkmkZe+21m+1QGcjVUxtSkizaM48NUvkuAGYOG0ncn+kqEgrzw==}
-
-  nuxt-maplibre@1.2.2:
-    resolution: {integrity: sha512-CjUhG6QIHANLNQBOD8Tp6VRyb67+o96ODbEZ6LT/e6ZyW0TjA9qsCuG0qIX6klCrK5jU97Or5t9qXbE9bBaEzQ==}
 
   nuxt@4.2.2:
     resolution: {integrity: sha512-n6oYFikgLEb70J4+K19jAzfx4exZcRSRX7yZn09P5qlf2Z59VNOBqNmaZO5ObzvyGUZ308SZfL629/Q2v2FVjw==}
@@ -9984,13 +9981,6 @@ snapshots:
       uncsrf: 1.2.0
     transitivePeerDependencies:
       - magicast
-
-  nuxt-maplibre@1.2.2(vue@3.5.26(typescript@5.9.3)):
-    dependencies:
-      '@indoorequal/vue-maplibre-gl': 8.4.2(maplibre-gl@5.16.0)(vue@3.5.26(typescript@5.9.3))
-      maplibre-gl: 5.16.0
-    transitivePeerDependencies:
-      - vue
 
   nuxt@4.2.2(@libsql/client@0.15.15)(@parcel/watcher@2.5.1)(@types/node@25.0.3)(@vue/compiler-sfc@3.5.26)(cac@6.7.14)(db0@0.3.4(@libsql/client@0.15.15)(drizzle-orm@0.45.1(@libsql/client@0.15.15)(kysely@0.28.9)))(drizzle-orm@0.45.1(@libsql/client@0.15.15)(kysely@0.28.9))(eslint@9.39.2(jiti@2.6.1))(ioredis@5.8.2)(lightningcss@1.30.2)(magicast@0.5.1)(optionator@0.9.4)(rollup@4.54.0)(terser@5.44.1)(typescript@5.9.3)(vite@7.3.0(@types/node@25.0.3)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.1)(yaml@2.8.2))(vue-tsc@3.2.1(typescript@5.9.3))(yaml@2.8.2):
     dependencies:
