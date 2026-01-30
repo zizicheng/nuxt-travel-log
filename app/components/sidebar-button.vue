@@ -4,6 +4,7 @@ const props = defineProps<{
   icon: string;
   href: string;
   showLabel: boolean;
+  iconColor?: "text-accent" | "text-primary" | "text-secondary";
 }>();
 
 const route = useRoute();
@@ -24,6 +25,7 @@ const route = useRoute();
         :name="props.icon"
         size="24"
         class="flex-none"
+        :class="props.iconColor"
       />
       <span v-if="showLabel" class="truncate">{{ props.label }}</span>
     </NuxtLink>
