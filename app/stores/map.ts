@@ -5,12 +5,7 @@ import type { MapPoint } from "~/lib/types";
 export const useMapStore = defineStore("useMapStore", () => {
   const mapPoints = ref<MapPoint[]>([]);
   const selectedPoint = ref<MapPoint | null>(null);
-  const shouldFlyTo = ref(true);
-
-  function selectPointWithoutFlyTo(point: MapPoint | null) {
-    shouldFlyTo.value = false;
-    selectedPoint.value = point;
-  }
+  const addedPoint = ref<MapPoint | null>(null);
 
   async function init() {
     const { useMap } = await import("@indoorequal/vue-maplibre-gl");
@@ -36,29 +31,22 @@ export const useMapStore = defineStore("useMapStore", () => {
       });
     });
 
-    effect(() => {
-      if (selectedPoint.value) {
-        if (shouldFlyTo.value) {
-          map.map?.flyTo({
-            center: [selectedPoint.value.long, selectedPoint.value.lat],
-            speed: 2,
-          });
-        }
-        else {
-          shouldFlyTo.value = true;
-        }
-      }
-      else if (bounds) {
-        map.map?.fitBounds(bounds, {
-          padding,
+    watch(addedPoint, (newPoint, oldPoint) => {
+      if (newPoint && oldPoint === null) {
+        map.map?.flyTo({
+          center: [newPoint.long, newPoint.lat],
+          speed: 2,
+          zoom: 5,
         });
       }
+    }, {
+      immediate: true,
     });
   }
   return {
     init,
     mapPoints,
     selectedPoint,
-    selectPointWithoutFlyTo,
+    addedPoint,
   };
 });
