@@ -5,7 +5,7 @@
   "packageManager": "pnpm@10.24.0+sha512.01ff8ae71b4419903b65c60fb2dc9d34cf8bb6e06d03bde112ef38f7a34d6904c424ba66bea5cdcf12890230bf39f9580473140ed9c946fef328b6e5238a345a",
   "scripts": {
     "build": "nuxt build",
-    "dev": "concurrently \"pnpm run dev:db\" \"nuxt dev\"",
+    "dev": "concurrently \"pnpm run dev:db\" \"NODE_OPTIONS=--dns-result-order=ipv4first nuxt dev\"",
     "dev:db": "turso dev --db-file local.db",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
@@ -36,6 +36,7 @@
     "pinia": "^3.0.4",
     "slug": "^11.0.1",
     "tailwindcss": "^4.1.18",
+    "undici": "^7.20.0",
     "vue": "^3.5.26",
     "vue-router": "^4.6.4",
     "zod": "^4.3.5"
