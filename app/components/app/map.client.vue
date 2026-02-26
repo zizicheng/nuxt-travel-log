@@ -74,7 +74,7 @@ onMounted(() => {
         <div
           class="tooltip tooltip-top hover:cursor-pointer"
           :class="{
-            'tooltip-open': mapStore.selectedPoint?.id === point.id,
+            'tooltip-open': isPointSelected(point, mapStore.selectedPoint),
           }"
           :data-tip="point.name"
           @mouseenter="mapStore.selectedPoint = point"
@@ -83,7 +83,7 @@ onMounted(() => {
           <Icon
             name="i-tabler:map-pin-filled"
             size="30"
-            :class="mapStore.selectedPoint?.id === point.id ? 'text-accent' : 'text-primary'"
+            :class="isPointSelected(point, mapStore.selectedPoint) ? 'text-accent' : 'text-primary'"
           />
         </div>
       </template>
@@ -94,6 +94,20 @@ onMounted(() => {
         <p v-if="point.description">
           {{ point.description }}
         </p>
+        <div class="flex items-end">
+          <NuxtLink
+            v-if="point.to"
+            :to="point.to"
+            class="btn btn-sm btn-primary mt-2"
+          >
+            {{ point.toLabel ?? "View" }}
+            <Icon
+              name="i-tabler:arrow-right"
+              size="20"
+              class="ml-1"
+            />
+          </NuxtLink>
+        </div>
       </MglPopup>
     </MglMarker>
   </mglmap>
