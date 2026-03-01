@@ -1,13 +1,15 @@
 <script setup lang="ts">
+const locationsStore = useLocationsStore();
+const {
+  currentLocation: location,
+  currentLocationStatus: status,
+  currentLocationError: error,
+} = storeToRefs(locationsStore);
 const route = useRoute();
-const mapStore = useMapStore();
-
-const { slug } = route.params;
-const { data: location, status, error } = await useFetch(`/api/locations/${slug}`, { lazy: true });
-
-effect(() => {
-  if (location.value) {
-    mapStore.mapPoints = [location.value];
+onMounted(() => {
+  const slug = route.params.slug as string;
+  if (slug) {
+    locationsStore.refreshCurrentLocation(slug);
   }
 });
 </script>
@@ -42,6 +44,7 @@ effect(() => {
       <h2 class="text-lg">
         {{ error.statusMessage }}
       </h2>
+      <p>{{ route.params.slug }}</p>
     </div>
   </div>
 </template>
