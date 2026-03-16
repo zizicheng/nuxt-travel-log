@@ -1,15 +1,20 @@
 <script setup lang="ts">
-const locationsStore = useLocationsStore();
+const locationStore = useLocationStore();
 const {
   currentLocation: location,
   currentLocationStatus: status,
   currentLocationError: error,
-} = storeToRefs(locationsStore);
+} = storeToRefs(locationStore);
 const route = useRoute();
-onMounted(() => {
-  const slug = route.params.slug as string;
-  if (slug) {
-    locationsStore.refreshCurrentLocation(slug);
+onMounted(async () => {
+  if (route.params.slug) {
+    await nextTick();
+    locationStore.refreshCurrentLocation();
+  }
+});
+onBeforeRouteUpdate((to) => {
+  if (to.name === "dashboard-location-slug") {
+    locationStore.refreshCurrentLocation();
   }
 });
 </script>
@@ -19,7 +24,12 @@ onMounted(() => {
     <div v-if="status === 'pending'">
       <div class="loading" />
     </div>
-    <div v-if="location && status !== 'pending'">
+    <div v-if="error && status !== 'pending'" class="alert alert-error">
+      <h2 class="text-lg">
+        {{ error.statusMessage }}八个压力
+      </h2>
+    </div>
+    <div v-if="route.name === 'dashboard-location-slug' && location && status !== 'pending'">
       <h2 class="text-xl">
         {{ location.name }}
       </h2>
@@ -40,11 +50,8 @@ onMounted(() => {
         </button>
       </div>
     </div>
-    <div v-if="error && status !== 'pending'" class="alert alert-error">
-      <h2 class="text-lg">
-        {{ error.statusMessage }}
-      </h2>
-      <p>{{ route.params.slug }}</p>
+    <div v-if="route.name !== 'dashboard-location-slug'">
+      <NuxtPage />
     </div>
   </div>
 </template>
