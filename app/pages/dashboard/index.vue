@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const locationsStore = useLocationsStore();
+const locationsStore = useLocationStore();
 const { locations, locationsStatus: status } = storeToRefs(locationsStore);
 const mapStore = useMapStore();
 
