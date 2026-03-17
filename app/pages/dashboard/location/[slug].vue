@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import type { FetchError } from "ofetch";
 
-import { is } from "drizzle-orm";
-
 const locationStore = useLocationStore();
 const {
   currentLocation: location,
