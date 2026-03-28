@@ -3,7 +3,7 @@ import type { InsertLocation } from "~/lib/db/schema";
 
 const { $csrfFetch } = useNuxtApp();
 async function onSubmit(values: InsertLocation) {
-  await $csrfFetch("/api/location", {
+  await $csrfFetch("/api/locations", {
     method: "post",
     body: values,
   });
