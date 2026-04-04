@@ -40,8 +40,6 @@ export const useLocationStore = defineStore("useLocationsStore", () => {
 
       locations.value.forEach((location) => {
         const mapPoint = createMapPointFromLocation(location);
-        mapPoints.push(mapPoint);
-
         sidebarItems.push({
           id: `location-${location.id}`,
           label: location.name,
@@ -49,16 +47,40 @@ export const useLocationStore = defineStore("useLocationsStore", () => {
           to: mapPoint.to,
           mapPoint,
         });
+        mapPoints.push(mapPoint);
       });
 
       sidebarStore.sidebarItems = sidebarItems;
       mapStore.mapPoints = mapPoints;
     }
-    else if (currentLocation.value && CURRENT_LOCATION_PAGES.has(route.name?.toString() || "")) {
-      sidebarStore.sidebarItems = [];
-      mapStore.mapPoints = [currentLocation.value];
+    else if (currentLocation.value && CURRENT_LOCATION_PAGES.has(route.name?.toString() || "") && route.params.slug) {
+      const slug = route.params.slug.toString();
+      const mapPoints: MapPoint[] = [];
+      const sidebarItems: SidebarItem[] = [];
+
+      currentLocation.value.locationLogs.forEach((log) => {
+        const mapPoint = createMapPointFromLocationLog(log, route.params.slug as string);
+        sidebarItems.push({
+          id: `location-log-${log.id}`,
+          label: log.name,
+          icon: `i-tabler:map-pin-filled`,
+          to: `/dashboard/location/${slug}/${log.id}`,
+          mapPoint,
+        });
+        mapPoints.push(mapPoint);
+      });
+      sidebarStore.sidebarItems = sidebarItems;
+      if (mapPoints.length) {
+        mapStore.mapPoints = mapPoints;
+      }
+      else {
+        mapStore.mapPoints = [currentLocation.value];
+      }
     }
-    sidebarStore.loading = locationsStatus.value === "pending";
+    sidebarStore.loading = locationsStatus.value === "pending" || currentLocationStatus.value === "pending";
+    if (sidebarStore.loading) {
+      mapStore.mapPoints = [];
+    }
   });
 
   return {

@@ -6,21 +6,35 @@ export const useMapStore = defineStore("useMapStore", () => {
   const mapPoints = ref<MapPoint[]>([]);
   const selectedPoint = ref<MapPoint | null>(null);
   const addedPoint = ref<MapPoint & { centerMap?: boolean; zoom?: number } | null>(null);
+  const mapReady = ref(false);
 
   async function init() {
     const { useMap } = await import("@indoorequal/vue-maplibre-gl");
     const { LngLatBounds } = await import("maplibre-gl");
 
     const map = useMap();
+
+    if (map.map) {
+      if (map.map.loaded()) {
+        mapReady.value = true;
+      }
+      else {
+        map.map.on("load", () => {
+          mapReady.value = true;
+        });
+      }
+    }
+
     let bounds: LngLatBounds | null = null;
     const padding = 40;
 
-    effect(() => {
-      const firstPoint = mapPoints.value[0];
-      if (!firstPoint)
+    watch([() => mapPoints.value, () => mapReady.value], ([points, ready]) => {
+      const firstPoint = points[0];
+      if (!firstPoint || !ready) {
         return;
+      }
 
-      bounds = mapPoints.value.reduce((bounds, point) => {
+      bounds = points.reduce((bounds, point) => {
         return bounds.extend([point.long, point.lat]);
       }, new LngLatBounds(
         [firstPoint.long, firstPoint.lat],
@@ -30,6 +44,8 @@ export const useMapStore = defineStore("useMapStore", () => {
         padding,
         maxZoom: 10,
       });
+    }, {
+      flush: "post",
     });
 
     watch(addedPoint, (newPoint, oldPoint) => {
