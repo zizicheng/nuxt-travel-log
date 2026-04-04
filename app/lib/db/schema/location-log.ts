@@ -6,6 +6,8 @@ import { createInsertSchema } from "drizzle-zod";
 
 import { DateSchema, DescriptionSchema, LatSchema, LongSchema, NameSchema } from "~/lib/zod-schema";
 
+import type { SelectLocationLogImage } from "./location-log-image";
+
 import { user } from "./auth";
 import { location } from "./location";
 
@@ -60,3 +62,6 @@ export const InsertLocationLog = createInsertSchema(locationLog, {
 
 export type InsertLocationLog = z.infer<typeof InsertLocationLog>;
 export type SelectLocationLog = typeof locationLog.$inferSelect;
+export type SelectLocationLogWithImages = SelectLocationLog & {
+  images: SelectLocationLogImage[];
+};

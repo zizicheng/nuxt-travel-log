@@ -122,10 +122,11 @@ function toggleSidebar() {
           :href="item.href"
           :to="item.to"
         />
-        <div v-if="sidebarStore.sidebarItems.length || sidebarStore.loading" class="divider" />
         <div v-if="sidebarStore.loading" class="px-4">
           <div class="skeleton h-4 w-full" />
         </div>
+        <div v-if="sidebarStore.sidebarItems.length && !sidebarStore.loading" class="divider" />
+
         <div v-if="!sidebarStore.loading && sidebarStore.sidebarItems.length" class="flex flex-col">
           <SidebarButton
             v-for="item in sidebarStore.sidebarItems"
