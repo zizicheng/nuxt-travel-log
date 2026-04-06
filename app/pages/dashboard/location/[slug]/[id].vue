@@ -11,9 +11,8 @@ const {
 const loading = computed(() => status.value === "pending");
 const errorMessage = computed(() => error.value?.statusMessage);
 
-onMounted(async () => {
-  if (route.params.slug && route.params.id) {
-    await nextTick();
+onBeforeRouteUpdate((to) => {
+  if (to.name === "dashboard-location-slug-id") {
     locationStore.refreshCurrentLocationLog();
   }
 });
