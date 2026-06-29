@@ -1,3 +1,4 @@
+import { Buffer } from "node:buffer";
 import { ProxyAgent, fetch as undiciFetch } from "undici";
 
 import type { NominatimResult } from "~/lib/types";
@@ -17,9 +18,13 @@ export default defineAuthenticatedEventHandler(
     if (!result.success) {
       return sendZodError(event, result.error);
     }
+    const searchParams = new URLSearchParams({
+      q: result.data.q,
+      format: "json",
+    });
 
     try {
-      const response = await undiciFetch(`https://nominatim.openstreetmap.org/search?q=${result.data.q}&format=json`, {
+      const response = await undiciFetch(`https://nominatim.openstreetmap.org/search?${searchParams.toString()}`, {
         signal: AbortSignal.timeout(5000),
         dispatcher: proxyAgent,
         headers: {
@@ -47,7 +52,8 @@ export default defineAuthenticatedEventHandler(
     name: "search-nominatim",
     getKey: (event) => {
       const query = getQuery(event);
-      return query.q?.toString() || "";
+      const q = query.q?.toString() ?? "";
+      return Buffer.from(q).toString("base64");
     },
   }),
 );
