@@ -1,5 +1,6 @@
 import { GetObjectCommand } from "@aws-sdk/client-s3";
 
+import { findLocation } from "~/lib/db/queries/location";
 import { insertLocationLogImage } from "~/lib/db/queries/location-log-image";
 import { InsertLocationLogImage } from "~/lib/db/schema";
 import env from "~/lib/env";
@@ -20,7 +21,11 @@ export default defineAuthenticatedEventHandler(async (event) => {
   const slug = getRouterParam(event, "slug") as string;
   const id = getRouterParam(event, "id") as string;
 
-  await event.$fetch(`/api/locations/${slug}/${id}`);
+  const location = await findLocation(slug, Number.parseInt(id));
+
+  if (!location || location.slug !== slug) {
+    throw createError({ statusCode: 404 });
+  }
 
   const client = createS3Client();
   const command = new GetObjectCommand({
