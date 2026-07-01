@@ -47,7 +47,7 @@ function setLocation(result: NominatimResult) {
   <div class="flex flex-col flex-1 gap-2">
     <Form
       ref="form"
-      v-slot="{ errors }"
+      v-slot="{ errors, values }"
       class="flex flex-col gap-2 items-center"
       :validation-schema="toTypedSchema(SearchSchema)"
       :initial-values="{ q: '' }"
@@ -67,6 +67,7 @@ function setLocation(result: NominatimResult) {
               }"
             />
           </label>
+          <pre>{{ values }}</pre>
           <div v-if="errors.q" class="text-error text-sm">
             {{ errors.q }}
           </div>

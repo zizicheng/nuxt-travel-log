@@ -16,12 +16,16 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1031.0",
+    "@aws-sdk/s3-presigned-post": "^3.1031.0",
+    "@aws-sdk/s3-request-presigner": "3.1031.0",
     "@indoorequal/vue-maplibre-gl": "^8.4.2",
     "@libsql/client": "^0.15.15",
     "@nuxt/eslint": "1.12.1",
     "@nuxt/icon": "2.1.1",
     "@nuxtjs/color-mode": "4.0.0",
     "@pinia/nuxt": "0.11.3",
+    "@smithy/types": "4.14.3",
     "@tailwindcss/vite": "^4.1.18",
     "@vee-validate/nuxt": "^4.15.1",
     "@vee-validate/zod": "^4.15.1",
