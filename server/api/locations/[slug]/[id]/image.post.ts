@@ -21,7 +21,7 @@ export default defineAuthenticatedEventHandler(async (event) => {
   const slug = getRouterParam(event, "slug") as string;
   const id = getRouterParam(event, "id") as string;
 
-  const location = await findLocation(slug, Number.parseInt(id));
+  const location = await findLocation(slug, event.context.user.id);
 
   if (!location || location.slug !== slug) {
     throw createError({ statusCode: 404 });
