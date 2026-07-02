@@ -12,13 +12,6 @@ type ObjectMetadata = {
 };
 
 export default defineAuthenticatedEventHandler(async (event) => {
-  console.log("🔥 IMAGE API HIT");
-
-  console.log("USER DEBUG:", {
-    user: event.context.user,
-    userId: event.context.user?.id,
-    type: typeof event.context.user?.id,
-  });
   const result = await readValidatedBody(event, InsertLocationLogImage.safeParse);
 
   if (!result.success) {
@@ -42,6 +35,11 @@ export default defineAuthenticatedEventHandler(async (event) => {
 
   const response = await client.send(command);
   const metadata = response.Metadata as ObjectMetadata | undefined;
+  console.log("R2 RESPONSE:", {
+    metadata: response.Metadata,
+    contentType: response.ContentType,
+    headers: response.$metadata,
+  });
 
   if (!metadata
     || metadata["location-log-id"] !== id
