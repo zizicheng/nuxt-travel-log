@@ -1,15 +1,6 @@
-import { GetObjectCommand } from "@aws-sdk/client-s3";
-
 import { findLocation } from "~/lib/db/queries/location";
 import { insertLocationLogImage } from "~/lib/db/queries/location-log-image";
 import { InsertLocationLogImage } from "~/lib/db/schema";
-import env from "~/lib/env";
-import createS3Client from "~/utils/create-s3-client";
-
-type ObjectMetadata = {
-  "location-log-id": string;
-  "user-id": string;
-};
 
 export default defineAuthenticatedEventHandler(async (event) => {
   const result = await readValidatedBody(event, InsertLocationLogImage.safeParse);
@@ -23,30 +14,10 @@ export default defineAuthenticatedEventHandler(async (event) => {
 
   const location = await findLocation(slug, event.context.user.id);
 
-  if (!location || location.slug !== slug) {
-    throw createError({ statusCode: 404 });
-  }
-
-  const client = createS3Client();
-  const command = new GetObjectCommand({
-    Bucket: env.S3_BUCKET,
-    Key: result.data.key,
-  });
-
-  const response = await client.send(command);
-  const metadata = response.Metadata as ObjectMetadata | undefined;
-  console.log("R2 RESPONSE:", {
-    metadata: response.Metadata,
-    contentType: response.ContentType,
-    headers: response.$metadata,
-  });
-
-  if (!metadata
-    || metadata["location-log-id"] !== id
-    || metadata["user-id"] !== event.context.user.id.toString()) {
+  if (!location) {
     throw createError({
       statusCode: 404,
-      statusMessage: "Image not found",
+      statusMessage: "Location not found.",
     });
   }
 

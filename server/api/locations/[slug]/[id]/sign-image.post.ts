@@ -32,10 +32,6 @@ export default defineAuthenticatedEventHandler(async (event) => {
     Bucket: env.S3_BUCKET,
     Key: key,
     ContentLength: result.data.contentLength,
-    Metadata: {
-      "user-id": event.context.user.id.toString(),
-      "location-log-id": id,
-    },
   });
 
   const url = await getSignedUrl(client, command, { expiresIn: 120 });
