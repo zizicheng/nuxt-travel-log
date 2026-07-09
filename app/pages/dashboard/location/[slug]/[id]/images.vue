@@ -30,6 +30,27 @@ function deleteImage(image: SelectLocationLogImage) {
   isOpen.value = true;
 }
 
+async function confirmDelete() {
+  if (!deletingImage.value) {
+    return;
+  }
+  isOpen.value = false;
+  try {
+    isDeleting.value = true;
+    errorMessage.value = "";
+    await $fetch(`/api/locations/${route.params.slug}/${route.params.id}/image/${deletingImage.value.id}`, {
+      method: "DELETE",
+    });
+    await locationStore.refreshCurrentLocationLog();
+  }
+  catch (e) {
+    const error = e as FetchError;
+    errorMessage.value = getFetchErrorMessage(error);
+  }
+  isDeleting.value = false;
+  deletingImage.value = null;
+}
+
 function selectImage(event: Event) {
   const file = (event.target as HTMLInputElement).files?.[0];
   if (file) {
@@ -169,6 +190,7 @@ async function uploadImage() {
       confirm-class="btn-error"
       :is-open="isOpen"
       @on-closed="onDialogClose"
+      @on-confirmed="confirmDelete"
     />
   </div>
 </template>
